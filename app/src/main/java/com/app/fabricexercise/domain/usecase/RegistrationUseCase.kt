@@ -7,7 +7,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class RegistrationUseCase @Inject constructor(
+open class RegistrationUseCase @Inject constructor(
     private val repository: RegistrationRepository
 ) {
 

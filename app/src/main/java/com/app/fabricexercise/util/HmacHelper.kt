@@ -30,7 +30,7 @@ object HmacHelper {
         val mac = Mac.getInstance("HmacSHA256")
         mac.init(secretKeySpec)
         val calculatedHmac = mac.doFinal(content.toByteArray(Charsets.UTF_8))
-        val calculatedChecksum = Base64.encodeToString(calculatedHmac, Base64.NO_WRAP)
+        val calculatedChecksum = Base64.encodeToString(calculatedHmac, Base64.DEFAULT)
         Log.e(
             "${javaClass.simpleName}: Decoded Base64String",
             "Calculated Checksum: $calculatedChecksum"

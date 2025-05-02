@@ -43,6 +43,7 @@ class RegistrationFirebaseService : FirebaseMessagingService() {
         }
     }
 
+
     private fun showNotification(content: String) {
         val channelId = "fcm_channel_id"
         val channelName = "FCM Notifications"
@@ -54,7 +55,7 @@ class RegistrationFirebaseService : FirebaseMessagingService() {
             val channel = NotificationChannel(
                 channelId,
                 channelName,
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "Channel for FCM messages"
             }
@@ -62,13 +63,14 @@ class RegistrationFirebaseService : FirebaseMessagingService() {
         }
 
         val notification = NotificationCompat.Builder(this, channelId)
-            .setContentTitle("New Message")
+            .setContentTitle("Verification Message")
             .setContentText(content)
             .setSmallIcon(R.drawable.open_fabric_logo) // Use your app's icon or a notification icon
             .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
-        notificationManager.notify(1001, notification)
+        notificationManager.notify(System.currentTimeMillis().toInt(), notification)
     }
 
 }

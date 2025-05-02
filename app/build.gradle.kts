@@ -69,6 +69,11 @@ dependencies {
     testImplementation(libs.junit.junit)
     testImplementation(libs.junit.junit)
     testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.junit.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -88,14 +93,21 @@ dependencies {
     //jetpack compose utility function to observe live data in jetpack compose
     implementation(libs.androidx.runtime.livedata)
 
-    implementation ("androidx.security:security-crypto:1.1.0-alpha07")
+    implementation("androidx.security:security-crypto:1.1.0-alpha07")
 
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
-    testImplementation ("app.cash.turbine:turbine:1.0.0")
-    testImplementation ("org.mockito:mockito-core:5.2.0")
-    testImplementation ("org.mockito.kotlin:mockito-kotlin:5.2.1")
-    testImplementation ("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+    testImplementation("org.mockito:mockito-core:5.2.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("io.mockk:mockk:1.13.2")
+
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.56.1")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.56.1")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+    testImplementation ("org.mockito:mockito-inline:5.2.0")
+    testImplementation("com.google.firebase:firebase-messaging-ktx:23.3.1")
+    testImplementation("com.google.firebase:firebase-messaging-directboot:23.3.1")
 
 }
 kapt {

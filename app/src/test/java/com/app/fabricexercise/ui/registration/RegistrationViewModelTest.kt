@@ -4,14 +4,21 @@ import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.app.fabricexercise.domain.usecase.RegistrationUseCase
+import com.app.fabricexercise.util.RegistrationEventBus
 import com.app.fabricexercise.util.TimerHelper
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
@@ -21,6 +28,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -56,7 +64,6 @@ class RegistrationViewModelTest {
         mockkStatic(Log::class)
         every { Log.e(any(), any(), any()) } returns 0
 
-        // Mock static Log class using Mockito's mockStatic (requires Mockito 3.4+)
         try {
             val logClass = mockStatic(Log::class.java)
             logClass.`when`<Int> { Log.e(anyString(), anyString()) }.thenReturn(0)
@@ -73,7 +80,7 @@ class RegistrationViewModelTest {
     }
 
     @Test
-    fun `registerDevice should generate key, update state to InProgress and start timer`() =
+    fun `registerDevice should generate key, update state to toInitial and start timer`() =
         runTest {
             // Given
             val dummyKey = "test-hmac-key"
@@ -109,7 +116,6 @@ class RegistrationViewModelTest {
         assertEquals(RegistrationState.Initial, viewModel.state.value)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `registerDevice should transition through all states`() = runTest {
         // Given

@@ -13,13 +13,6 @@ class TimerHelper {
 
     private var job: Job? = null
 
-    fun startTimer(scope: CoroutineScope, onTimeout: () -> Unit) {
-        job = scope.launch {
-            delay(15 * 1 * 1000L) // 15 minutes
-            onTimeout()
-        }
-    }
-
     fun startCountdown(scope: CoroutineScope, onTimeout: () -> Unit) {
         cancelTimer() // in case already running
 

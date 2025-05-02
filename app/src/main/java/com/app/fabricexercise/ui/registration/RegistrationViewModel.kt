@@ -21,16 +21,16 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class RegistrationViewModel @Inject constructor(
+open class RegistrationViewModel @Inject constructor(
     private val useCase: RegistrationUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<RegistrationState>(RegistrationState.Initial)
-    val state: StateFlow<RegistrationState> = _state
+    open val state: StateFlow<RegistrationState> = _state
 
     private val timerHelper = TimerHelper()
 
-    val remainingFormattedTime: StateFlow<String> = timerHelper.remainingTime
+    open val remainingFormattedTime: StateFlow<String> = timerHelper.remainingTime
         .map { seconds ->
             val minutes = seconds / 60
             val secs = seconds % 60
@@ -45,16 +45,18 @@ class RegistrationViewModel @Inject constructor(
     private fun observeRegistrationResult() {
         viewModelScope.launch {
             RegistrationEventBus.registrationResult.collect { isValid ->
-                timerHelper.cancelTimer()
-                _state.value =
-                    if (isValid) RegistrationState.Registered else RegistrationState.RegistrationFailed
-                delay(10000)
-                _state.value = RegistrationState.Initial
+                if (_state.value == RegistrationState.InProgress) {
+                    timerHelper.cancelTimer()
+                    _state.value =
+                        if (isValid) RegistrationState.Registered else RegistrationState.RegistrationFailed
+                    delay(10000)
+                    _state.value = RegistrationState.Initial
+                }
             }
         }
     }
 
-    fun registerDevice() {
+    open fun registerDevice() {
         viewModelScope.launch {
             val secretKey = useCase.generateAndStoreSecretKey()
             Log.e("${javaClass.simpleName}: Registration", "Generated Secret Key: $secretKey")
@@ -67,15 +69,6 @@ class RegistrationViewModel @Inject constructor(
                     _state.value = RegistrationState.Initial
                 }
             }
-        }
-    }
-
-    fun onMessageReceived(payload: MessagePayload) {
-        viewModelScope.launch {
-            timerHelper.cancelTimer()
-            val isValid = useCase.verifyMessage(payload.content, payload.checksum)
-            _state.value =
-                if (isValid) RegistrationState.Registered else RegistrationState.RegistrationFailed
         }
     }
 

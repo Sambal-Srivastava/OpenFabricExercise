@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FabricExercise</string>
+    <string name="register_device">Register Device</string>
+    <string name="registration_in_progress">Registration in progress....</string>
+    <string name="registered_successfully">Registered Successfully!</string>
+    <string name="registration_expired">Registration Expired!</string>
+    <string name="registration_failed">Registration Failed!</string>
 </resources>
